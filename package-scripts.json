@@ -1,0 +1,12 @@
+{
+    "scripts": {
+        "install-all": "npm install && cd backend && npm install",
+        "dev-all": "concurrently \"npm run dev\" \"cd backend && npm run dev\"",
+        "build-all": "npm run build && cd backend && npm run build",
+        "start-backend": "cd backend && npm start",
+        "start-frontend": "npm run preview"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}
