@@ -63,16 +63,30 @@ io.on('connection', (socket) => {
 });
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/sviet-uncensored')
-  .then(() => {
+let isConnected = false;
+
+const connectToMongoDB = async () => {
+  if (isConnected) return;
+  
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/sviet-uncensored');
+    isConnected = true;
     console.log('Connected to MongoDB');
-    server.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
+  } catch (error) {
     console.error('MongoDB connection error:', error);
+  }
+};
+
+// Initialize MongoDB connection
+connectToMongoDB();
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
   });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {
